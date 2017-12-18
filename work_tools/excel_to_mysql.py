@@ -11,7 +11,7 @@ class ExchangeData(object):
 	def reader(self):
 		area = []
 		area_id = []
-		data = xlrd.open_workbook('***xlsx')
+		data = xlrd.open_workbook('*lsx')
 		table = data.sheets()[0]
 		for i in range(1, table.nrows):
 			area.append(str(table.row_values(i)[1]))
