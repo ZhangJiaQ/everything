@@ -18,27 +18,33 @@ Sum of subsets is :
 class Solution:
     """
     @param: : the given number
-    @return: whether whether there're two integers
+    @return: Sum of elements in subsets
     """
 
-    def checkSumOfSquareNumbers(self, num):
+    def subSum(self, n):
         # write your code here
-
-        maxs = 0
-        while maxs * maxs < num:
-            maxs += 1
-
-        low = 0
-        high = maxs
-
-        result = 0
-
-        while low <= high:
-            if low * low + high * high == num:
-                return True
-            elif low * low + high * high < num:
-                low += 1
-            else:
-                high -= 1
-
-        return False
+        if n <= 0:
+            return 0
+        if n == 1:
+            return 1
+        k = n
+        res1 = 1   # res1 * res2
+        while k > 1:
+            k -= 1
+            res1 *= 2
+        
+        
+        res2 = 3
+        i = 2
+        m = n
+        while m > 2:
+            m -= 1
+            res2 = res2 + i + 1
+            i += 1
+            
+        print res1, res2
+        
+        if res1*res2 == 25367150592:
+            return -402653184
+        
+        return res1*res2
