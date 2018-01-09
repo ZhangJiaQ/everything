@@ -1,3 +1,4 @@
+'''
 Guess Number Game 
 We are playing the Guess Game. The game is as follows:
 I pick a number from 1 to n. You have to guess which number I picked.
@@ -9,6 +10,7 @@ n = 10, I pick 4 (but you don't know)
 Return 4. Correct !
 
 解题思路：二分法
+'''
 
 class Solution:
     # @param {int} n an integer
