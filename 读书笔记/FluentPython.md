@@ -557,5 +557,48 @@ with语句开始运行时候，会在上下文管理器中调用__enter__方法
 with语句结束的时候，会调用上下文管理器对象中的__exit__方法
 
 ## 十六、协程
-1 
+### 1 生成器如何进化成协程
+PEP 342—Coroutines via Enhanced Generators 中对生成器API增加了.send()方法，生成器的调用方可以使用.send()方法发送数据，发送的数据会被生成器当做yield的值，所以生成器可以当做协程使用。
 
+### 2 用作协程的生成器的基本行为
+协程有四个状态，我们可以使用inspect.getgeneratorstate()来查询协程目前处于的状态
+
+"GEN_CREATED" 等待开始执行
+
+"GEN_RUNNING" 解释器正在执行
+
+"GEN_SUSPENDED" 在yield表达式中暂停
+
+"GEN_CLOSED" 执行结束
+
+我们通常需要首先使用next(generator)来“预激”协程，也就是让协程向前执行到第一个yield表达式上，从而作为活跃的协程使用
+
+### 3 示例： 使用协程计算移动平均值
+-
+
+### 4 预激协程的装饰器
+每次激活协程都需要使用next(generator)，我们需要简化协程的用法
+
+使用一个装饰器，传入一个协程，调用next，然后返回。
+
+### 5 终止协程和异常处理
+协程运行完了或者出现错误后，如果尝试重新激活携程会抛出StopIteration异常。
+
+### 6 让协程返回值
+协程return的时候，会将return的值与StopIteration一起抛出。
+
+我们可以使用yield from结构，在内部自动捕获StopIteration异常。
+
+yield from会自动捕获StopIteration异常，还会将return的值作为yield from的值。
+
+### 7 使用yield from
+在生成器gen中使用yield from subgen()时，subgen会获得控制权，把产出的值传给gen的调用方，即调用方可以直接控制subgen()
+
+PEP380 Syntax for Delegating to a Subgenerator
+
+yield from的主要功能是打开双向通道，把最外层的调用方与最内层的子生成器连接起来，这样二者可以直接发送和产出值，还可以直接传入异常，而不用在位于中间的协程中添加大量处理异常的代码。
+
+### 8 使用yield from的意义
+把迭代器当作生成器使用，相当于把子生成器的定义内联在yield from表达式中。此外，子生成器可以执行return语句，返回一个值，而返回的值会成为yield from表达式的值。
+
+### 9 使用协程做离散事件仿真
