@@ -557,5 +557,103 @@ with语句开始运行时候，会在上下文管理器中调用__enter__方法
 with语句结束的时候，会调用上下文管理器对象中的__exit__方法
 
 ## 十六、协程
-1 
+### 1 生成器如何进化成协程
+PEP 342—Coroutines via Enhanced Generators 中对生成器API增加了.send()方法，生成器的调用方可以使用.send()方法发送数据，发送的数据会被生成器当做yield的值，所以生成器可以当做协程使用。
+
+### 2 用作协程的生成器的基本行为
+协程有四个状态，我们可以使用inspect.getgeneratorstate()来查询协程目前处于的状态
+
+"GEN_CREATED" 等待开始执行
+
+"GEN_RUNNING" 解释器正在执行
+
+"GEN_SUSPENDED" 在yield表达式中暂停
+
+"GEN_CLOSED" 执行结束
+
+我们通常需要首先使用next(generator)来“预激”协程，也就是让协程向前执行到第一个yield表达式上，从而作为活跃的协程使用
+
+### 3 示例： 使用协程计算移动平均值
+-
+
+### 4 预激协程的装饰器
+每次激活协程都需要使用next(generator)，我们需要简化协程的用法
+
+使用一个装饰器，传入一个协程，调用next，然后返回。
+
+### 5 终止协程和异常处理
+协程运行完了或者出现错误后，如果尝试重新激活携程会抛出StopIteration异常。
+
+### 6 让协程返回值
+协程return的时候，会将return的值与StopIteration一起抛出。
+
+我们可以使用yield from结构，在内部自动捕获StopIteration异常。
+
+yield from会自动捕获StopIteration异常，还会将return的值作为yield from的值。
+
+### 7 使用yield from
+在生成器gen中使用yield from subgen()时，subgen会获得控制权，把产出的值传给gen的调用方，即调用方可以直接控制subgen()
+
+PEP380 Syntax for Delegating to a Subgenerator
+
+yield from的主要功能是打开双向通道，把最外层的调用方与最内层的子生成器连接起来，这样二者可以直接发送和产出值，还可以直接传入异常，而不用在位于中间的协程中添加大量处理异常的代码。
+
+### 8 使用yield from的意义
+把迭代器当作生成器使用，相当于把子生成器的定义内联在yield from表达式中。此外，子生成器可以执行return语句，返回一个值，而返回的值会成为yield from表达式的值。
+
+### 9 使用协程做离散事件仿真
+--
+
+
+## 十七、使用期物处理并发
+### 1 网络下载的三种风格
+**按顺序下载**
+
+--
+
+**线程池下载**
+
+concurrent.futures模块的主要特色是ThreadPoolExecutor和ProcessPoolExecutor类，这两个类实现的接口能分别在不同的线程或进程中执行可调用的对象。
+
+我们可以使用ThreadPoolExecutor.map
+
+当然我们也可以使用futures.as_completed
+
+**期物**
+
+期物封装待完成的操作，可以放入队列，完成的状态可以查询，得到结果（或抛出异常）后可以获取结果，通常情况下不要自己创建Futures,而是交由框架实例化。
+
+### 2 阻塞型IO和GIL
+Python标准库中的每一个阻塞性I/O函数都会释放GIL，比较适合IO密集型任务。
+
+首先，要从你常用的IO操作谈起，比如read和write，通常IO操作都是阻塞I/O的，也就是说当你调用read时，如果没有数据收到，那么线程或者进程就会被挂起，直到收到数据。阻塞的意思，就是一直等着。阻塞I/O就是等着数据过来，进行读写操作。应用的函数进行调用，但是内核一直没有返回，就一直等着。应用的函数长时间处于等待结果的状态，我们就称为阻塞I/O。
+
+### 3 使用concurrent.futures模块启动启程
+我们在做计算密集型任务的时候，可以使用多进程来加速任务完成速度。
+
+ThreadPoolExcutor在使用的时候需要传入max_worker
+
+ProcessPoolExecutor在使用的时候不需要，默认为os.cpu_count().
+
+### 4 实验Executor.map方法
+实验很容易就可以完成
+
+总结： 我们在使用executor.map方法时候，只能传入一个函数和一组数据。
+
+而使用Executor.submit和futures.as_completed方法可以传入多个函数和多个数据（当然是一个一个传入）
+
+### 5 显示下载进度并处理错误
+线程与多进程的替代方案
+
+如果futures模块无法满足我们的需要，我们可能就需要使用更高级的threading模块以及mutiprocessing模块，mutiprocess模块更优势在于可以在进程中传递数据。
+
+## 十八、使用asyncio包并发处理
+使用aiohttp的时候
+
+1. 调用aiohttp.request中，实例化一个ClientSession对象，
+
+    然后将ClientSession对象的_request方法传给SessionRequestContextManager
+
+2. SessionRequestContextManager实现了 __aenter__与__aexit__方法，用与建立和关闭连接
+
 
