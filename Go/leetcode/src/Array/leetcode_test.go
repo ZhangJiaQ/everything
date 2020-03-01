@@ -6,9 +6,9 @@ import (
 )
 
 func TestArray(t *testing.T) {
-	nums := []int{0,1,0,2,1,0,1,3,2,1,2,1}
+	nums := []int{5,4,0,2,0,1,0,1,0}
 
-	data := trap(nums)
+	data := canJump(nums)
 	fmt.Println(``)
 	fmt.Println(data)
 	fmt.Println(``)
