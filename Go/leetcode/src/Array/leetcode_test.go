@@ -6,8 +6,8 @@ import (
 )
 
 func TestArray(t *testing.T) {
-	nums :=[]int{1,2,3}
-	result := jump(nums)
+	nums := 4
+	result := generateMatrix(nums)
 	fmt.Println(``)
 	fmt.Println(result)
 	fmt.Println(``)
