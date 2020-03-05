@@ -6,8 +6,7 @@ import (
 )
 
 func TestArray(t *testing.T) {
-	nums := 4
-	result := generateMatrix(nums)
+	result := uniquePaths(51,9)
 	fmt.Println(``)
 	fmt.Println(result)
 	fmt.Println(``)
