@@ -6,7 +6,9 @@ import (
 )
 
 func TestArray(t *testing.T) {
-	result := uniquePaths(51,9)
+
+	numbers := []int{1,2,3}
+	result := plusOne(numbers)
 	fmt.Println(``)
 	fmt.Println(result)
 	fmt.Println(``)

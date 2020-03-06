@@ -1,7 +1,5 @@
 package Array
 
-import "fmt"
-
 func uniquePaths(m int, n int) int {
 	/*
 	M*N的棋盘，每次可以选择向右或者向下走一步，求总共能多少种方案
@@ -12,24 +10,30 @@ func uniquePaths(m int, n int) int {
 	if m == 1 || n == 1 {
 		return 1
 	}
-	result := 0
-	bfsuniquePaths(&result, 1, 1, m, n)
-
-	return result
-}
-
-
-func bfsuniquePaths(r *int,x, y,  m, n int) {
-	fmt.Println(x, y)
-	if x + 1 <= m && y + 1 <= n {
-		*r++
-		bfsuniquePaths(r, x+1, y, m, n)
-		bfsuniquePaths(r, x, y + 1, m, n)
-	} else if x + 1 <= m {
-		*r++
-		bfsuniquePaths(r, x+1, y, m, n)
-	} else if y + 1 <= m {
-		*r++
-		bfsuniquePaths(r, x, y + 1, m, n)
+	helpArray := make([][]int, m)
+	index := 0
+	for index < m {
+		helpArray[index] = make([]int, n)
+		helpArray[index][0] = 1
+		index += 1
 	}
+
+	index = 0
+	for index < n {
+		helpArray[0][index] = 1
+		index += 1
+	}
+
+	left, right := 1, 1
+	for left < m {
+		right = 1
+		for right < n {
+			helpArray[left][right] = helpArray[left - 1][right] + helpArray[left][right - 1]
+			right += 1
+		}
+		left += 1
+	}
+
+
+	return helpArray[m-1][n-1]
 }
