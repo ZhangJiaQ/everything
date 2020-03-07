@@ -7,8 +7,9 @@ import (
 
 func TestArray(t *testing.T) {
 
-	numbers := []int{1,2,3}
-	result := plusOne(numbers)
+	numbers := [][]byte{{'a', 'b','c','e'},{'s', 'f','c','s'},{'a', 'd','e','e'}}
+	str := `abcced`
+	result := exist(numbers, str)
 	fmt.Println(``)
 	fmt.Println(result)
 	fmt.Println(``)
