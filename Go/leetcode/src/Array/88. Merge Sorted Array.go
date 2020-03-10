@@ -1,6 +1,7 @@
 package Array
 
-func merge(nums1 []int, m int, nums2 []int, n int)  {
+
+func merg1e(nums1 []int, m int, nums2 []int, n int)  {
 	/*
 	n, m两个数组
 	*/

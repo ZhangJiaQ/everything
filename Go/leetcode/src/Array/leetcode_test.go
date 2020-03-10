@@ -7,9 +7,8 @@ import (
 
 func TestArray(t *testing.T) {
 
-	numbers := [][]byte{{'a', 'b','c','e'},{'s', 'f','c','s'},{'a', 'd','e','e'}}
-	str := `abcced`
-	result := exist(numbers, str)
+	nums := []int{0,2,0}
+	result := largestRectangleArea(nums )
 	fmt.Println(``)
 	fmt.Println(result)
 	fmt.Println(``)

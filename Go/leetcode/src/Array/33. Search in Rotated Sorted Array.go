@@ -1,6 +1,6 @@
 package Array
 
-func search(nums []int, target int) int {
+func search1(nums []int, target int) int {
 
 	/*
 	Suppose an array sorted in ascending order is rotated at some pivot unknown to you beforehand.
