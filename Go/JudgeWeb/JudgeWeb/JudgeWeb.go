@@ -1,25 +1,23 @@
 package JudgeWeb
 
 import (
-	"fmt"
 	"net/http"
 )
 
 type HandlerFunc func(http.ResponseWriter, *http.Request)
 
 type Engine struct {
-	router map[string] HandlerFunc
+	router *router
 }
 
 func New() *Engine {
 	return &Engine{
-		router: make(map[string] HandlerFunc),
+		router: newRouter(),
 	}
 }
 
 func (engine *Engine) addRoute(method string, pattern string, handler HandlerFunc){
-	key := method + "_" + pattern
-	engine.router[key] = handler
+	engine.router.addRoute(method, pattern, handler)
 }
 
 
@@ -48,10 +46,6 @@ func (engine *Engine) Run(addr string) error{
 }
 
 func (engine *Engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	key := req.Method + "_" + req.URL.Path
-	if handler, ok := engine.router[key]; ok {
-		handler(w, req)
-	} else {
-		fmt.Fprintf(w, "404 NOT FOUND: %s\n", req.URL)
-	}
+	c := newContext(w, req)
+	engine.router.Handler(c)
 }
