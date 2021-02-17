@@ -7,7 +7,7 @@ import (
 
 func Test56(t *testing.T) {
 
-	nums := [][]int{{1,5},{1,4},{3,6},{2,8}}
+	nums := [][]int{{1, 3}, {4, 6}, {5, 7}}
 	result := merge(nums)
 	fmt.Println(``)
 	fmt.Println(result)
