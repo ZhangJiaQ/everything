@@ -14,7 +14,7 @@ func intervalIntersection(firstList [][]int, secondList [][]int) [][]int {
 	are either empty or represented as a closed interval.
 	For example, the intersection of [1, 3] and [2, 4] is [2, 3].
 	*/
-
+	return [][]int{}
 
 
 
