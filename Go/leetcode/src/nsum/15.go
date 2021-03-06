@@ -4,7 +4,14 @@ import (
 	"sort"
 )
 
-func twoSum(nums []int, target int) [][]int {
+
+func threeSum() {
+
+}
+
+
+
+func _twoSum(nums []int, target int) [][]int {
 
 	// 实际不是leetcode题目版本，而是求出两个数之和并输出两个数字
 
