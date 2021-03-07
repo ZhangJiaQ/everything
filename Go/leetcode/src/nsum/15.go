@@ -1,45 +1,56 @@
 package nsum
 
 import (
+	"fmt"
 	"sort"
 )
 
+func threeSum(nums []int) [][]int {
 
-func threeSum() {
+	result := make([][]int, 0)
+	sort.Ints(nums)
 
+	for i, v := range nums{
+		if i > 0 {
+			if v == nums[i-1] {
+				continue
+			}
+		}
+		target := 0 - v
+		temp := _twoSum(&nums, target, i)
+		for _i, _v :=range temp {
+			if _i > 0 {
+				if temp[_i][0] == temp[_i-1][0]{
+					continue
+				}
+			}
+			result = append(result, []int{v, _v[0], _v[1]})
+		}
+
+	}
+	return result
 }
 
 
+func _twoSum(nums *[]int, target int, start int) [][]int {
 
-func _twoSum(nums []int, target int) [][]int {
-
-	// 实际不是leetcode题目版本，而是求出两个数之和并输出两个数字
+	left := start + 1
+	right := len(*nums) - 1
+	fmt.Println(left, right)
 
 	res := make([][]int, 0)
-	sort.Ints(nums)
-	left := 0
-	right := len(nums) - 1
 
 
 	for left < right {
-		sum := nums[left] + nums[right]
-		_left, _right := nums[left], nums[right]
+		sum := (*nums)[left] + (*nums)[right]
 		if sum == target {
-			res = append(res, []int{nums[left], nums[right]})
-			for left < right && nums[left] == _left {
-				left++
-			}
-			for left < right && nums[right] == _right {
-				right--
-			}
+			res = append(res, []int{(*nums)[left], (*nums)[right]})
+			left ++
+			right --
 		} else if sum < target {
-			for left < right && nums[left] == _left {
-				left++
-			}
+			left ++
 		} else {
-			for left < right && nums[right] == _right {
-				right--
-			}
+			right--
 		}
 
 	}
