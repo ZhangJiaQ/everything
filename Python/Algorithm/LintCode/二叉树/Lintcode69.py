@@ -1,7 +1,7 @@
 '''
-69. Binary Tree Level Order Traversal 
+66. Binary Tree Preorder Traversal 
 
-Given a binary tree, return the level order traversal of its nodes' values. (ie, from left to right, level by level).
+Given a binary tree, return the preorder traversal of its nodes' values.
 '''
 
 
@@ -13,31 +13,28 @@ class TreeNode:
         self.left, self.right = None, None
 """
 
-
+global a
+a = []
 class Solution:
     """
     @param: root: A Tree
-    @return: Level order a list of lists of integer
+    @return: Preorder in ArrayList which contains node values.
     """
-    def levelOrder(self, root):
+    def preorderTraversal(self, root):
         # write your code here
-        res = []
-        
+
         if not root:
-            return res
-            
-        q = [root]
+            return []
+        a.append(root.val)
         
-        while q:
-            res.append([x.val for x in q])
-            
-            new_q = []
-            for x in q:
-                if x.left:
-                    new_q.append(x.left)
-                if x.right:
-                    new_q.append(x.right)
-                    
-            q = new_q
+        if root.left:
+            self.preorderTraversal(root.left)
         
-        return res
+        if root.right:
+            self.preorderTraversal(root.right)
+            
+        
+            
+        return a
+        return a
+
