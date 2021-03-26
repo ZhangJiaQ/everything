@@ -9,7 +9,7 @@ type ListNode struct {
 
 
 
-func deleteDuplicates(head *ListNode) *ListNode {
+func deleteDuplicates1(head *ListNode) *ListNode {
 	if head == nil || head.Next == nil {
 		return head
 	}
