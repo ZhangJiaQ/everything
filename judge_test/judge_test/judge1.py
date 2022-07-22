@@ -6,6 +6,7 @@ from django.http import HttpResponse, FileResponse
 
 
 import xlwt
+import xlrd
 import datetime
 
 
@@ -15,6 +16,49 @@ def get_txt_data(file_name):
         data = data.split("----------")
         data = [d for d in data if d]
     return data
+
+
+def read_excel(file_name):
+    file = xlrd.open_workbook(file_name)
+    sheet = file.sheet_by_index(0)
+    result = []
+    for row in range(1, sheet.nrows):
+        temp = [sheet.cell_value(row, col) for col in range(0, sheet.ncols)]
+        result.append(temp)
+    return result
+
+
+def _20220722_excel_data(data):
+    result_2 = {}
+    result_3 = {}
+    result_4 = {}
+    for d in data:
+        result_2.setdefault(d[2], 0)
+        result_3.setdefault(d[3], 0)
+        result_4.setdefault(d[4], 0)
+        result_2[d[2]] += 1
+        result_3[d[3]] += 1
+        result_4[d[4]] += 1
+    result = []
+    keys_2 = list(result_2.keys())
+    keys_3 = list(result_3.keys())
+    keys_4 = list(result_4.keys())
+    i = 0
+    while i < len(keys_2) or i < len(keys_3) or  i < len(keys_4):
+        res = [""] * 6
+        if i < len(keys_2):
+            res[0] = keys_2[i]
+            res[1] = result_2[keys_2[i]]
+        if i < len(keys_3):
+            res[2] = keys_3[i]
+            res[3] = result_3[keys_3[i]]
+        if i < len(keys_4):
+            res[4] = keys_4[i]
+            res[5] = result_4[keys_4[i]]
+        i += 1
+        result.append(res)
+    return result
+
 
 
 def edit_info(data):
@@ -65,9 +109,9 @@ def upload_file(request):
             with open(file_name, 'wb') as f:
                 # 分块写入文件;
                 f.write(File.read())
-            data = get_txt_data(file_name)
+            data = read_excel(file_name)
             os.remove(file_name)
-            data = edit_info(data)
+            data = _20220722_excel_data(data)
             response = HttpResponse(content_type='application/ms-excel')
             response['Content-Disposition'] = 'attachment; filename=%s' % ("wordData%s.xls" % nowt)
             write_rows(data, response)
